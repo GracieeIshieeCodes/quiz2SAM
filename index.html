@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FINALS QUIZ 2</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .quiz-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .correct { color: #28a745; font-weight: bold; }
+    .wrong { color: #dc3545; font-weight: bold; }
+    .form-check-input:checked {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+    h2 { text-align: center; margin-bottom: 2rem; font-weight: 600; }
+    .btn-primary { width: 100%; }
+    .list-group-item { transition: background-color 0.3s; }
+    .list-group-item:hover { background-color: #f8f9fa; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2><i class="fas fa-clipboard-question me-2"></i>Finals Quiz 2</h2>
+    <div class="quiz-card">
+      <form id="quizForm">
+        <div id="quizContainer"></div>
+        <button type="submit" class="btn btn-primary mt-4">Submit Answers</button>
+      </form>
+    </div>
+    <div id="result" class="quiz-card d-none"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "WINS works by requiring each NetBIOS host to register  its NetBIOS name to IP address mapping on the windows server by using  a process called",
+        options: ["name registration", "Generic restricted top level domain"],
+        answer: 0
+      },
+      {
+        question: "It uses transport layer security or SSL to encrypt the communication for added data security.",
+        options: ["HTTPS", "HTTP"],
+        answer: 0
+      },
+      {
+        question: "Attempt to register their names with a WINS server when they start or join the network. ",
+        options: ["Windows Internet Name Service Client", "Generic restricted top level domain"],
+        answer: 0
+      },
+      {
+        question: "Each WINS server should be in pull/push _________ configuration ",
+        options: ["replication", "Network"],
+        answer: 0
+      },
+      {
+        question: "A protocol for delivering network addresses and other host-specific configuration parameters ",
+        options: ["DHCP", "Geographical Span"],
+        answer: 0
+      },
+      {
+        question: "Each _______ should be in a push/pull replication configuration.",
+        options: ["Windows Internet Name Service Server", "Sponsored top level domain"],
+        answer: 0
+      },
+      {
+        question: "Is a standard communication protocol used for the transfer of computer files from a server to a client on a computer network.   ",
+        options: ["Windows Internet Name Service Server", "File Transfer Protocol"],
+        answer: 1
+      },
+      {
+        question: "A protocol for delivering network addresses and other host-specific configuration parameters   ",
+        options: ["DHCP", "DNS"],
+        answer: 0
+      },
+      {
+        question: "Is a communication protocol that allows the users on the same or different computers to send an email over the internet.   ",
+        options: ["Simple Mail Transfer Protocol", "DESIGN TEAM"],
+        answer: 0
+      },
+      {
+        question: "DHCP automatically assigns an IP address to a client for a limited period of time   ",
+        options: ["Dynamic Allocation", "DESIGN TEAM"],
+        answer: 0
+      },
+    ];
+
+    const quizContainer = document.getElementById('quizContainer');
+    const resultContainer = document.getElementById('result');
+
+    questions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.classList.add('mb-4');
+      div.innerHTML = `<h5>${i + 1}. ${q.question}</h5>`;
+      q.options.forEach((opt, j) => {
+        div.innerHTML += `
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="q${i}" value="${j}" id="q${i}o${j}">
+            <label class="form-check-label" for="q${i}o${j}">${opt}</label>
+          </div>
+        `;
+      });
+      quizContainer.appendChild(div);
+    });
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let score = 0;
+      let output = '<h4 class="mb-3"><i class="fas fa-check-circle text-success me-2"></i>Results</h4><ul class="list-group">';
+      questions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const selectedVal = selected ? parseInt(selected.value) : -1;
+        const isCorrect = selectedVal === q.answer;
+        if (isCorrect) score++;
+        output += `<li class="list-group-item">
+          <strong>${i + 1}. ${q.question}</strong><br>
+          <span class="${isCorrect ? 'correct' : 'wrong'}">
+            Your answer: ${selected ? q.options[selectedVal] : 'None'}<br>
+            ${isCorrect ? 'Correct!' : `Correct answer: ${q.options[q.answer]}`}
+          </span>
+        </li>`;
+      });
+      output += `</ul><h5 class="mt-4 text-primary">Score: ${score} / ${questions.length}</h5>`;
+      resultContainer.innerHTML = output;
+      resultContainer.classList.remove('d-none');
+      window.scrollTo({ top: resultContainer.offsetTop, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
